@@ -7,10 +7,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <title>Friend Survey</title>
 </head>
 
 <body>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Best Match</h3>
+                    <button type="button" class="close" d="close-modal" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                </div>
+                <div class="modal-body">
+                    <h4 id="match-name"></h4>
+                    <img id="match-image" src="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="close-modal" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="jumbotron ">
             <h1>Friend Finder</h1>
@@ -28,9 +49,9 @@
                             <form class="form" id="input-form">
 
                                 <div class="form-group">
-                                    <label for="name" class="mt-2"><strong>Name(Required)</strong></label>
+                                    <label for="" class="mt-2"><strong>Name(Required)</strong></label>
                                     <input type="text " id="name " class="form-control mb-2" required>
-                                    <label for="photo"><strong>Link to Photo(Required)</strong></label>
+                                    <label for=""><strong>Link to Photo(Required)</strong></label>
                                     <input type="text " id="photo " class="form-control " required>
                                 </div>
                                 <h3>Question 1</h3>
@@ -134,7 +155,7 @@
                                 <option value="5 ">5(Strongly Agree)</option>
                                 </select>
                             </form>
-                            <button class="btn btn-dark mt-3 mb-3 " type="submit" id="submit">Submit</button>
+                            <button class="btn btn-dark mt-3 mb-3 " type="submit" id="add">Submit</button>
                         </div>
 
                     </div>
@@ -142,13 +163,43 @@
             </div>
         </div>
         <div class="footer text-center">
-            <a href="./api/friends">API Friends List</a>
+            <a href="/api/friends.js">API Friends List</a>
             <span>|</span>
             <a href="https://github.com/Ic3man85/FriendFinder">GitHub Repo</a>
             <br>
         </div>
     </div>
     <script type="text/javascript">
+        $("#add").on("click", function(event) {
+            event.preventDefault();
+            let newFriend = {
+                name: $("#name").val().trim(),
+                photo: $("#photo").val().trim(),
+                scores: [
+                    $("#q1").val(),
+                    $("#q2").val(),
+                    $("#q3").val(),
+                    $("#q4").val(),
+                    $("#q5").val(),
+                    $("#q6").val(),
+                    $("#q7").val(),
+                    $("#q8").val(),
+                    $("#q9").val(),
+                    $("#q10").val()
+                ]
+            };
+            $("#input-form").html("Thanks for taking the survey, here is your new best friend");
+            $.post("/api/friends.js", newFriend)
+                .done(function(data) {
+                    $("#match-name").text(data.name);
+                    $("#match-image").attr("src", data.photo);
+                });
+        });
+        $("#close-modal").on("click", function() {
+            setTimeout(function() {
+                location.reload()
+            }, 1000);
+        });
     </script>
 </body>
 

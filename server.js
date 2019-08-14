@@ -1,5 +1,6 @@
 let express = require('express');
 let path = require('path');
+let bodyParser = require('body-parser');
 
 let app = express();
 
@@ -7,7 +8,10 @@ let PORT = process.env.PORT || 8080;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(express.static("app"));
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: "application/vnd.api+json" }));
+app.use(express.static("app/public"));
+
 
 
 
