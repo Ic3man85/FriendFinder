@@ -1,38 +1,38 @@
-let friends = require('../data/friends');
+let list = require('../data/friends');
 
 module.exports = function(app) {
 
     app.get("/api/friends.js", function(req, res) {
-        res.json(friends);
+        res.json(list);
     });
 
     app.post("/api/friends.js", function(req, res) {
         let newFriend = req.body;
-        let total = 0;
+        console.log(newFriend);
         let match = {
             name: "",
             photo: "",
             difference: 10
         };
 
-        for (let i = 0; i < friends.length; i++) {
-            total = 0;
-
-            for (let x = 0; x < friends[i].scores.length; x++) {
-                total += Math.abs(friends[i].scores[x] - newFriend.scores[x]);
+        for (let i = 0; i < list.length; i++) {
+            let total = 0;
+            for (let j = 0; j < list[i].scores.length; j++) {
+                total += Math.abs(parseInt(list[i].scores[j]) - parseInt(newFriend.scores[j]));
 
                 if (total <= match.difference) {
-                    match.name = friends[i].name;
-                    match.photo = friends[i].photo;
+                    match.name = list[i].name;
+                    match.photo = list[i].photo;
                     match.difference = total;
                 }
             }
         }
-        console.log(newFriend);
-        friends.push(newFriend);
+        list.push(newFriend);
         res.json(match);
+        console.log(match);
+    });
 
 
 
-    })
+
 }
